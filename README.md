@@ -1,11 +1,12 @@
 # @eponyme/storage
 
-Edge-compatible remote storage drivers for Eponyme. The package currently supports Amazon S3,
-S3-compatible providers, Cloudflare R2 and Google Cloud Storage through its XML API and HMAC
-interoperability keys.
+Edge-compatible object storage drivers for Amazon S3, S3-compatible providers, Cloudflare R2 and
+Google Cloud Storage — the last through its XML API and HMAC interoperability keys.
 
-This is an initial standalone package. Wiring a factory into `eponyme.storage.ts`, a local driver,
-file fields, persistence and garbage collection belong to later Eponyme core work.
+One small interface over four providers: `put`, `get`, `delete`, `stat`, `list`, `move`, `url` and
+`presignPut`. Written for [Eponyme](https://github.com/karibsen-studio/eponyme), which uses it for
+its media library, but it does not depend on it and never imports it. Anything that runs `fetch`
+can use it on its own.
 
 ## Install
 
@@ -18,8 +19,9 @@ Web Crypto, and do not import Node APIs.
 
 ## Factories and credentials
 
-Options describe the storage location. Credentials are supplied separately by Eponyme through the
-factory context, so secrets do not have to live in a checked-in storage configuration.
+A factory is created from the options that describe *where* things are stored, then called with the
+credentials that say *who* is storing them. Splitting the two is what lets the location live in a
+checked-in file while the secrets come from the environment.
 
 ```ts
 import type { StorageFactoryContext } from '@eponyme/storage'
