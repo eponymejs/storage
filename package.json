@@ -1,0 +1,54 @@
+{
+  "name": "@eponyme/storage",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Edge-compatible S3, Cloudflare R2 and Google Cloud Storage drivers for Eponyme.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eponymejs/storage.git"
+  },
+  "license": "MIT",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
+    },
+    "./s3": {
+      "types": "./dist/s3.d.mts",
+      "import": "./dist/s3.mjs"
+    },
+    "./r2": {
+      "types": "./dist/r2.d.mts",
+      "import": "./dist/r2.mjs"
+    },
+    "./gcs": {
+      "types": "./dist/gcs.d.mts",
+      "import": "./dist/gcs.mjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "unbuild",
+    "test": "vitest run",
+    "test:types": "tsc --noEmit -p tsconfig.types.json",
+    "test:integration": "vitest run test/integration.test.ts",
+    "prepack": "pnpm run build"
+  },
+  "dependencies": {
+    "aws4fetch": "^1.0.20"
+  },
+  "devDependencies": {
+    "typescript": "~6.0.3",
+    "unbuild": "^3.6.1",
+    "vitest": "^4.1.8"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
