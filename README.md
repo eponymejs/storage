@@ -1,7 +1,7 @@
 # @eponyme/storage
 
 Edge-compatible object storage drivers for Amazon S3, S3-compatible providers, Cloudflare R2 and
-Google Cloud Storage — the last through its XML API and HMAC interoperability keys.
+Google Cloud Storage – the last through its XML API and HMAC interoperability keys.
 
 One small interface over four providers: `put`, `get`, `delete`, `stat`, `list`, `move`, `url` and
 `presignPut`. Written for [Eponyme](https://github.com/karibsen-studio/eponyme), which uses it for
@@ -116,7 +116,7 @@ When `publicUrl` is configured, `url()` returns that public origin for normal re
 `download` deliberately returns a signed storage-origin URL so the response can override
 `Content-Disposition`.
 
-`presignPut()` returns a `PUT` URL — and only a `PUT`; there is no POST policy form — with signed
+`presignPut()` returns a `PUT` URL – and only a `PUT`; there is no POST policy form – with signed
 `content-type` and `content-length` headers, sent back as `headers` for the uploader to repeat. The
 uploader must send a body whose byte length exactly matches `size`; the storage provider rejects a
 different length because it no longer matches the signature. Browser uploads should pass a `Blob`
@@ -132,7 +132,7 @@ flat bucket is browsed as folders.
 let cursor: string | undefined
 do {
   const page = await storage.list('uploads/', { delimiter: '/', limit: 100, cursor })
-  page.prefixes // ['uploads/2026/'] — the folders at this level
+  page.prefixes // ['uploads/2026/'] – the folders at this level
   page.objects // [{ key, size, lastModified }]
   cursor = page.cursor // absent on the last page
 }
@@ -167,7 +167,7 @@ catch (error) {
 | `invalid_response` | The provider answered something the driver cannot read. |
 | `unknown` | Anything else. |
 
-A message never carries a response body, a signed URL or a credential — only the provider, the
+A message never carries a response body, a signed URL or a credential – only the provider, the
 operation, the key and the status.
 
 Invalid arguments stay `TypeError` and `RangeError`: a key with a `..` segment is a bug in the

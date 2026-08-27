@@ -46,12 +46,12 @@ export interface StorageFactoryContext {
 /**
  * Why an operation failed, so a caller can tell a missing object from an outage.
  *
- * - `not_found` — the object does not exist.
- * - `access_denied` — the credentials are refused for this object.
- * - `unavailable` — the provider answered but could not serve it: 5xx, throttling, timeout.
- * - `network` — no answer at all; the request never completed.
- * - `invalid_response` — the provider answered something this driver cannot read.
- * - `unknown` — anything else, including 4xx codes with no specific meaning here.
+ * - `not_found` – the object does not exist.
+ * - `access_denied` – the credentials are refused for this object.
+ * - `unavailable` – the provider answered but could not serve it: 5xx, throttling, timeout.
+ * - `network` – no answer at all; the request never completed.
+ * - `invalid_response` – the provider answered something this driver cannot read.
+ * - `unknown` – anything else, including 4xx codes with no specific meaning here.
  */
 export type StorageErrorCode
   = | 'not_found'
