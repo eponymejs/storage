@@ -155,7 +155,7 @@ function errorCode(status: number | undefined): StorageErrorCode {
 }
 
 /**
- * The message carries the provider, the operation, the key and the status — never a response
+ * The message carries the provider, the operation, the key and the status – never a response
  * body, a signed URL or a credential, any of which a provider is happy to echo back.
  */
 function operationError(
