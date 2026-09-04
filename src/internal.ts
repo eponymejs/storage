@@ -74,10 +74,7 @@ export function encodeKey(key: string): string {
   return validateKey(key).split('/').map(segment => encodeURIComponent(segment)).join('/')
 }
 
-/**
- * A prefix is a string match, not a path: it may be empty and may stop mid-segment. Only the
- * traversal and control-character rules of {@link validateKey} apply.
- */
+/** A prefix is a string match. It may be empty or stop mid-segment. */
 export function validatePrefix(prefix: string): string {
   if (typeof prefix !== 'string') throw new TypeError('prefix must be a string')
   if (prefix === '') return prefix
@@ -154,10 +151,7 @@ function errorCode(status: number | undefined): StorageErrorCode {
   return 'unknown'
 }
 
-/**
- * The message carries the provider, the operation, the key and the status – never a response
- * body, a signed URL or a credential, any of which a provider is happy to echo back.
- */
+/** Never expose a response body, signed URL or credential in an error. */
 function operationError(
   provider: string,
   operation: string,
@@ -231,10 +225,7 @@ function xmlText(value: string): string {
     .replace(/&amp;/g, '&')
 }
 
-/**
- * Keys are read back with `encoding-type=url`, so a key holding a character XML cannot carry
- * survives the round trip.
- */
+/** Decode keys returned with `encoding-type=url` after reading their XML text. */
 function listedKey(value: string): string {
   return decodeURIComponent(xmlText(value).replace(/\+/g, '%2B'))
 }
@@ -243,10 +234,7 @@ function firstTag(xml: string, name: string): string | undefined {
   return new RegExp(`<${name}>([\\s\\S]*?)</${name}>`).exec(xml)?.[1]
 }
 
-/**
- * A regex reader rather than a parser: the response shape is fixed, and a DOM parser is not
- * available on every runtime this package targets.
- */
+/** A DOM parser is not available on every supported runtime. */
 export function parseListResult(xml: string): ListResult {
   const objects: StorageObject[] = []
   for (const [, entry] of xml.matchAll(/<Contents>([\s\S]*?)<\/Contents>/g)) {
@@ -320,8 +308,7 @@ export function createS3CompatibleFactory(rawOptions: AdapterOptions): StorageFa
         return await fetch(await signed)
       }
       catch (error) {
-        // A TypeError here is this driver's own validation, which already says what is wrong;
-        // anything else is the network, whose message may quote the signed URL.
+        // Keep validation errors intact. Replace network errors because they can quote the signed URL.
         if (error instanceof TypeError || error instanceof RangeError) throw error
         throw operationError(options.provider, operation, key)
       }
@@ -363,8 +350,7 @@ export function createS3CompatibleFactory(rawOptions: AdapterOptions): StorageFa
         if (response.status === 404) return null
         if (!response.ok) throw operationError(options.provider, 'stat', key, response)
 
-        // An object put there by another tool often has no content type. Only the size is
-        // genuinely required, so a missing type falls back rather than failing the read.
+        // Objects written by another tool may have no content type.
         const contentType = response.headers.get('content-type')?.trim() || FALLBACK_CONTENT_TYPE
         const rawSize = response.headers.get('content-length')
         const size = rawSize === null ? Number.NaN : Number(rawSize)

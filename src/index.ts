@@ -13,10 +13,7 @@ export interface ListOptions {
   limit?: number
   /** `cursor` of a previous result, to read the next page. */
   cursor?: string
-  /**
-   * Collapses everything after the next occurrence of this string into `prefixes`, which is how
-   * a flat bucket is browsed as folders. Pass `'/'` to list one level.
-   */
+  /** Groups entries after the next delimiter into `prefixes`. */
   delimiter?: string
 }
 
@@ -43,16 +40,7 @@ export interface StorageFactoryContext {
   }
 }
 
-/**
- * Why an operation failed, so a caller can tell a missing object from an outage.
- *
- * - `not_found` – the object does not exist.
- * - `access_denied` – the credentials are refused for this object.
- * - `unavailable` – the provider answered but could not serve it: 5xx, throttling, timeout.
- * - `network` – no answer at all; the request never completed.
- * - `invalid_response` – the provider answered something this driver cannot read.
- * - `unknown` – anything else, including 4xx codes with no specific meaning here.
- */
+/** Why an operation failed, so a caller can tell a missing object from an outage. */
 export type StorageErrorCode
   = | 'not_found'
     | 'access_denied'
