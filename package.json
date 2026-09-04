@@ -1,6 +1,6 @@
 {
   "name": "@eponyme/storage",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "type": "module",
   "description": "Edge-compatible object storage drivers for Amazon S3, Cloudflare R2 and Google Cloud Storage.",
   "repository": {
