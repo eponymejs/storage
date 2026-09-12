@@ -387,6 +387,18 @@ describe('@eponyme/storage', () => {
       expect(error).toMatchObject({ code: 'network', status: undefined })
     })
 
+    // A failed `fetch` throws a TypeError, the same class an invalid argument throws: the driver tells them
+    // apart by where they happen, not by their class.
+    it('reports a TypeError from fetch as a network failure too', async () => {
+      vi.stubGlobal('fetch', vi.fn(async () => {
+        throw new TypeError('fetch failed')
+      }))
+      const error = await createDriver(s3({ bucket: 'media', region: 'eu-west-3' }))
+        .stat('image.png').catch(value => value as StorageError)
+      expect(isStorageError(error)).toBe(true)
+      expect(error).toMatchObject({ code: 'network', status: undefined, operation: 'stat', key: 'image.png' })
+    })
+
     it('keeps an invalid key an argument error rather than a storage failure', async () => {
       const error = await createDriver(s3({ bucket: 'media', region: 'eu-west-3' }))
         .stat('../escape').catch(value => value as Error)

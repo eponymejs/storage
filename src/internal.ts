@@ -304,12 +304,14 @@ export function createS3CompatibleFactory(rawOptions: AdapterOptions): StorageFa
       key: string,
       signed: Promise<Request>,
     ): Promise<Response> => {
+      // Signed outside the guard below, so a caller's invalid key or expiration keeps its own message.
+      // Everything left inside is transport, whichever class it throws - a failed `fetch` is a `TypeError`
+      // - and it is replaced because the message can quote the signed URL.
+      const request = await signed
       try {
-        return await fetch(await signed)
+        return await fetch(request)
       }
-      catch (error) {
-        // Keep validation errors intact. Replace network errors because they can quote the signed URL.
-        if (error instanceof TypeError || error instanceof RangeError) throw error
+      catch {
         throw operationError(options.provider, operation, key)
       }
     }
